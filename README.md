@@ -1,5 +1,5 @@
 # mobMess
-Cordova App
+NodeJs WebSocket Server on Cordova App
 
 Just need to install cordova, check that you have the requirements ($ cordova requirements) and if you have them in principle is only $ cordova run android
 The code is in www / jxcore and instead of having the index.js this is within app.js
