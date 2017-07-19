@@ -14,7 +14,7 @@ var inter = setInterval(function() {
     return;
 
   clearInterval(inter);
-  
+
   document.getElementById('clrbtn').onclick = function() {
     ctrl_log().innerHTML = "";
   }
@@ -22,9 +22,10 @@ var inter = setInterval(function() {
   var addIp = function(addr) {
     document.getElementById('ipaddrs').innerHTML += "<li>" + addr + "</li>";
   }
-  
+
   jxcore.isReady(function() {
     log('READY');
+    log('Open your browser and log into'+addr+':3000/panel')
     // register log method from UI to jxcore instance
     jxcore('log').register(log);
     jxcore('addIp').register(addIp);
@@ -33,8 +34,11 @@ var inter = setInterval(function() {
       if (err) {
         alert(JSON.stringify(err));
       } else {
-        log('Loaded');
+        log('NodeJs Server Loaded');
+
         jxcore_ready();
+
+        log('Open your browser and log into'+addr+':3000/panel')
       }
     });
   });

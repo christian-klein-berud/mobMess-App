@@ -10,10 +10,10 @@ function init(){
 	} else {	// Ignore or do something else
 	}
   });
-  
+
   $("#clear").click(function(){
       var code = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-  
+
   displayBits(code)
       $('#code').text("[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]")
   });
@@ -40,11 +40,15 @@ function init(){
     }
   })
 
-    
+
   socket.on('pixels',function(code){
     displayBits(code)
   })
-   
+  socket.on('finnished',function(){
+    $('#msgsend').val("Send")
+     $("#msgsend").removeAttr("disabled");
+  })
+
   $('table.table td').click(function(){
     $(this).toggleClass('selected')
     var code = getUpdate()
@@ -54,8 +58,14 @@ function init(){
 
   //message forme
   $('#msgsend').click(function(){
+
+    $('#msgsend').val("Please Wait...")
+    $('#msgsend').attr('disabled', 'disabled');
+
+
     var msg = $('#msginput').val()
     $.get('/msg/'+msg)
+
   })
 }
 //display the code of the character display

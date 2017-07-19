@@ -25,15 +25,15 @@ if (!fs.existsSync(__dirname + "/node_modules")) {
   return;
 }
 
-var express  = require('express')
+express  = require('express')
 var app  = express()
 var http = require('http').Server(app)
 var io   = require('socket.io')(http)
 var os   = require('os')
-//var Queue = require('buffered-queue');
-
+var Queue = require('buffered-queue');
 //osc client
 var osc = require('node-osc');
+
 //var client = new osc.Client('10.20.29.51', 4444);
 var client = new osc.Client('192.168.19.170', 4444);
 //
@@ -90,7 +90,7 @@ app.use(express.static('public'))
 
 //endpoint for new message
 app.get('/msg/:msg',function(req,res){
-  displayMessage(req.params.msg)
+  msgQueue(req.params.msg);
   res.send('ok');
 })
 
@@ -102,16 +102,16 @@ app.get('/panel', function (req, res) {
     iface = ifaces[ifname]
     for(var i=0;i<iface.length;i++){
       var ifaddr = iface[i]['address']
-    direcIp = iface[i]['address'];
+	  direcIp = iface[i]['address'];
       //filter ipv6 and localhost addresses
       if( ifaddr.indexOf('.') != -1 && ifaddr.substr(0,3) != '127'){
         address = ifaddr
-    
-    
+
+
       }
     }
   }
-  
+
   res.render('panel',{address:address,port:port})
 })
 
@@ -183,12 +183,12 @@ mobilesock.on('connection',function(socket){
     socket.emit('c0', { hello: 'world' })
   })
   socket.on('chat message', function(msg){
-    
-    io.emit('chat message', msg);
-    
-      var mensaj =  new osc.Message('/'+pixelid);
-    mensaj.append(msg);
-    client.send(mensaj);
+
+	  io.emit('chat message', msg);
+
+    	var mensaj =  new osc.Message('/'+pixelid);
+		mensaj.append(msg);
+		client.send(mensaj);
   });
   //send to all panel connections
   socket.on('disconnect', function(){
@@ -243,12 +243,12 @@ function devicesUpdate(_pixels){
 //global var hold timeoutHandler so it displayMessage can be cleared and stopped
 //if a new message arrives
 var displayHandler = null
-/*
 function msgQueue(msg){
+
   msg.length = msg.length || 1000;
 var q = new Queue('msgBuffer', {
-    size: 5,
-    flushTimeout: 3000+(500*msg.length),
+    size: 1,
+    flushTimeout: 0,
     verbose: false,
     customResultFunction: function(items) {
         var temp = [];
@@ -259,44 +259,45 @@ var q = new Queue('msgBuffer', {
         return temp.join('\n');
     }
 });
- 
+if(displayHandler===null){
+  console.log("NEW FLUSH")
 q.on("flush", function(data, name){
-  
+  displayMessage(data);
     setTimeout(function() {
     console.log(data);
-    displayMessage(data);
-},2000+( 500*data.length));
+
+},( 0));
 });
- 
+}
 q.add(msg);
 }
-*/
-function displayMessage(msg){
-  var data = msg;
+
+
+function displayMessage(data){
 var mess = 0;
 var counter=0;
-var mob= []; 
+var mob= [];
 var msgIndex =0;
 var letter ;
   var limit = 35;
   var space = 1;
   for (pixelid=limit;pixelid>-1;pixelid--) {
-    
+
          var room = mobilesock.adapter.rooms[pixelid]
             if(room){//   ids moviles conectados
             mob.push(pixelid);
             //console.log(mob[mob.length-1]);
            // mob.push(mob[mob.length-1])
-            } 
-            
+            }
+
 }
 msgIndex=msgIndex-mob.length;
 
-(function myLoop (i) {          
-   setTimeout(function () {  
+(function myLoop (i) {
+   setTimeout(function () {
 
         letter = data[msgIndex];
-        
+
               if (letter in font){
               pixels = font[letter];
 
@@ -312,45 +313,53 @@ msgIndex=msgIndex-mob.length;
             space=1
            }
        msgIndex++;
-       //console.log(letter)
+       displayHandler=msgIndex;
+      console.log(letter)
+      displayHandler--;
 
+      if (msgIndex===data.length){
+ panelsock.emit('finnished', true)
+        console.log("DONE")
+        displayHandler=null;
+      }
        if(msgIndex<data.length+mob.length*2){
        //console.log(msgIndex+letter+mob[mess])
-       
+
         }else{
                msgIndex=0-mob.length;
         }
 
 
           //mobilesock.to(mob[mess]).emit('pixels',font[msg[msgIndex]])
-       for(var h = -1; h<mob.length;h++){
+       for(var h = -1; h<3;h++){
           //console.log(mob[mess]);
             if(space === 0){
-           
+
              mobilesock.to(mob[h]).emit('pixels',font[' '])
-             
+
            }
-              
+
             mobilesock.to(mob[h]).emit('pixels',font[data[msgIndex-h]])
           mess++
         }
 
 
 
-       //console.log("Counter"+counter)  
+       console.log("Counter"+counter)
 counter++
 
 if (--i) myLoop(i);      //  decrement i and call myLoop again if i > 0
    }, 500)
 })(data.length+mob.length*2);
-//console.log("TOTAL"+(data.length+mob.length*2))
+console.log("TOTAL"+(data.length+mob.length*2))
 
 }
 
-  
+
+
 
 http.listen(port,function(){
-  console.log('listening on ' + port)
+  console.log('listening on ' +port)
 })
 
 

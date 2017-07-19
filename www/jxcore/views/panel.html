@@ -95,17 +95,21 @@
                 <input id="msginput" type="text" class="form-control" placeholder="message" value="hello world!">
 
                 <span class="input-group-btn">
-              <button id="msgsend" class="btn btn-default" type="button">send</button>
+              <input class='btn btn-default' id="msgsend" type="button" value="Send"/>
+              <!--  <input class='btn btn-primary pull-right' type="submit" value="Submit" id='btnsubmit' />    -->
             </span>
             </div>
             <!-- /input-group -->
         </div>
     </div>
     <!-- /.container -->
-
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/panel.js"></script>
     <script src="/screenfull.js"></script>
     <script>
-        $(function() {
+      $(document).ready(function () {
 
 
 
@@ -150,7 +154,7 @@
             border: none;
             padding: 10px;
         }
-        
+
         #exit {
             position: absolute;
             /* 2 */
@@ -173,10 +177,7 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/panel.js"></script>
+
 
 </body>
 <button id="request" class="FllScr">Pixel</button>
