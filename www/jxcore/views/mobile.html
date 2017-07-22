@@ -17,7 +17,7 @@
     <!-- Custom styles for this template -->
     <link href="/style.css" rel="stylesheet">
   </head>
-   
+
 <style type="text/css">
     html,body {height:100%}
 .FllScr {
@@ -51,7 +51,7 @@ font-family: 'Consolas';
   position: absolute;
     left: 5%;
 	top: 90%;
-	
+
 }
 #m{
 -moz-border-radius: 5px;
@@ -59,14 +59,14 @@ font-family: 'Consolas';
   border-radius: 6px;
 font-family: 'Consolas';
   font-size: 20px;
-  
+
   position: absolute;
     left: 5%;
 	top: 70%;
 	background-color:lightgrey;}
 .id{
 color: red;
-border-style: dotted; 
+border-style: dotted;
 font-family: 'Consolas';
   font-size: 20px;
   position: absolute;
@@ -81,18 +81,18 @@ table{
     padding: :0;
     position: absolute; top: 0; bottom: 0; left: 0; right: 0;
     margin-bottom: 0%;
-  text-align: center; 
+  text-align: center;
     height:100%;
 min-height:100%;
     width:100%;
 }
 html>body table {height:100%}
 </style>
-    
- 
+
+
 <body id='container'>
 
- 
+
           <table class="table">
             <tbody>
               <tr>
@@ -146,7 +146,7 @@ html>body table {height:100%}
               </tr>
             </tbody>
           </table>
-       
+
 <div id="hide">
 <video class="video"
     id="my-player"
@@ -179,11 +179,25 @@ html>body table {height:100%}
     <script src="/socket.io/socket.io.js"></script>
     <script src="/mobile.js"></script>
 	<script src="/screenfull.js"></script>
-	<script src="https://richtr.github.io/NoSleep.js/NoSleep.js"></script>
+  <script src="/NoSleep.js"></script>
 	<script>
 		$(function () {
-           
+
 			$('#supported').text('Supported/allowed: ' + !!screenfull.enabled);
+
+      var noSleep = new NoSleep();
+      noSleep.enable();
+      alert("No Sleep enabled");
+
+      $('#request').click(function () {
+        noSleep.enable();
+        alert("No Sleep enabled");
+      });
+      $('#exit').click(function () {
+     noSleep.disable();
+     alert("No Sleep Disabled");
+      });
+
 
 			if (!screenfull.enabled) {
 				return false;
@@ -220,7 +234,7 @@ html>body table {height:100%}
 			fullscreenchange();
 		});
 		 </script>
-		  
-		
+
+
   </body>
 </html>

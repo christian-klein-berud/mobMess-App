@@ -25,18 +25,21 @@ if (!fs.existsSync(__dirname + "/node_modules")) {
   return;
 }
 
+Mobile.getDocumentsPath(function(err, location) {
+
+  clog("Documents location", location);
+});
 express  = require('express')
 var app  = express()
 var http = require('http').Server(app)
 var io   = require('socket.io')(http)
 var os   = require('os')
 var Queue = require('buffered-queue');
-//osc client
-var osc = require('node-osc');
 
-//var client = new osc.Client('10.20.29.51', 4444);
-var client = new osc.Client('192.168.19.170', 4444);
-//
+
+var fs = require('fs')
+var qr = require('qr-image');
+
 var font = {
   ' ':[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
   'a':[1,0,0,0,1,0,1,1,1,0,0,1,1,1,0,0,0,0,0,0,0,1,1,1,0,0,1,1,1,0,0,1,1,1,0],
@@ -111,9 +114,18 @@ app.get('/panel', function (req, res) {
       }
     }
   }
+  function file(name) {
+    return fs.createWriteStream(__dirname + '/' + name);
+  }
+  //Cannot write properly?
+  /*var qr_svg = qr.image("http://"+address+":"+port+"/", { type: 'svg', parse_url: true });
+  qr_svg.pipe(file('/qrAddr.svg'));
+  */
 
-  res.render('panel',{address:address,port:port})
+  res.render('panel',{address:address+":"+port})
 })
+
+
 
 app.get('/', function (req, res) {
   //if no mobile is specified connect to a empty pixel
@@ -144,12 +156,14 @@ app.get('/mobile/:id', function (req, res) {
 panelsock.on('connection',function(socket){
 
   console.log('a user connected to panel: '+socket.id)
+  clog('a user connected to panel: '+socket.id);
   //send pixel data
   socket.emit('pixels',pixels)
   //send connection data
   connCount()
   socket.on('disconnect', function(){
     console.log('user disconnected from panel: '+socket.id)
+    clog('user disconnected from panel: '+socket.id);
   })
   //updates all bg of all the mobile devices
   socket.on('pixels',function(_pixels){
@@ -160,7 +174,6 @@ panelsock.on('connection',function(socket){
     //update devices
    devicesUpdate()
   })
-
 })
 
 /* mobile connection */
@@ -172,6 +185,7 @@ mobilesock.on('connection',function(socket){
   socket.on('pixel',function(_pixelid){
     pixelid = _pixelid
     console.log('a mobile connected: '+socket.id + " pixel:" + pixelid)
+    clog('a mobile connected: '+socket.id + " pixel:" + pixelid);
     socket.join(pixelid)
     //count connections
     connCount()
@@ -186,13 +200,11 @@ mobilesock.on('connection',function(socket){
 
 	  io.emit('chat message', msg);
 
-    	var mensaj =  new osc.Message('/'+pixelid);
-		mensaj.append(msg);
-		client.send(mensaj);
   });
   //send to all panel connections
   socket.on('disconnect', function(){
     console.log('mobile disconnect: '+socket.id)
+    clog('mobile disconnect: '+socket.id)
     connCount()
   })
 
@@ -261,10 +273,12 @@ var q = new Queue('msgBuffer', {
 });
 if(displayHandler===null){
   console.log("NEW FLUSH")
+  clog("NEW FLUSH")
 q.on("flush", function(data, name){
   displayMessage(data);
     setTimeout(function() {
     console.log(data);
+    clog(data)
 
 },( 0));
 });
@@ -314,12 +328,14 @@ msgIndex=msgIndex-mob.length;
            }
        msgIndex++;
        displayHandler=msgIndex;
+       clog(letter);
       console.log(letter)
       displayHandler--;
 
       if (msgIndex===data.length){
  panelsock.emit('finnished', true)
         console.log("DONE")
+        clog("DONE");
         displayHandler=null;
       }
        if(msgIndex<data.length+mob.length*2){
@@ -352,14 +368,15 @@ if (--i) myLoop(i);      //  decrement i and call myLoop again if i > 0
    }, 500)
 })(data.length+mob.length*2);
 console.log("TOTAL"+(data.length+mob.length*2))
-
+clog("TOTAL"+(data.length+mob.length*2));
 }
 
 
 
 
 http.listen(port,function(){
-  console.log('listening on ' +port)
+  console.log('listening on ' +port);
+  clog('listening on ' +port);
 })
 
 
@@ -370,6 +387,7 @@ for (var ifc in net) {
   for (var a in addrs) {
     if (addrs[a].family == "IPv4") {
       Mobile('addIp').call(addrs[a].address);
+
     }
   }
 }

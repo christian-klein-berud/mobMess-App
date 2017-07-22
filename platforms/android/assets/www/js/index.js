@@ -25,7 +25,6 @@ var inter = setInterval(function() {
 
   jxcore.isReady(function() {
     log('READY');
-    log('Open your browser and log into'+addr+':3000/panel')
     // register log method from UI to jxcore instance
     jxcore('log').register(log);
     jxcore('addIp').register(addIp);
@@ -38,7 +37,7 @@ var inter = setInterval(function() {
 
         jxcore_ready();
 
-        log('Open your browser and log into'+addr+':3000/panel')
+
       }
     });
   });
@@ -53,6 +52,8 @@ function jxcore_ready() {
     getBuffer.call(function(bf, err) {
       var arr = new Uint8Array(bf);
       log("Buffer size:" + arr.length + " - first item: " + arr[0]);
+      log('Open your browser and log into localhost:3000/panel')
     });
   });
+
 }

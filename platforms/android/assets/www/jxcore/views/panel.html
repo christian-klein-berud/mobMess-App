@@ -25,8 +25,24 @@
         <div class="starter-template">
             <h1>mobMess</h1>
             <!--<h1>http://{{address}}:{{port}}</h1>-->
-            <h1 class="lead">Turn your screen into a pixel <br> </h1>
-            <h1>http://{{address}}:{{port}}</h1>
+            <h1 class="lead">Turn your screens into a collective display <br> </h1>
+            <h1 class="lead">Connect to: <br> </h1>
+            <h1 id="template">{{address}}</h1>
+            <div id="qrcode" align="center"></div>
+                <script src="/qrcode.js"></script>
+                <script src="/mustache.js"></script>
+            <!--  <img class="qr" src="qrAddr.svg" height=50% width=50% />-->
+            <script type="text/javascript">
+            var qrcode = new QRCode("qrcode");
+            var address = "{{address}}";
+
+            //var rendered1 = Mustache.(address, data);
+            var myvar = "http://"+address;
+            console.log(myvar);
+            qrcode.makeCode(myvar);
+            </script>
+            <script src="/NoSleep.js"></script>
+
         </div>
         <div class="phones row"></div>
         <div class="row">
@@ -108,17 +124,21 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="/panel.js"></script>
     <script src="/screenfull.js"></script>
+
     <script>
       $(document).ready(function () {
 
 
-
-            screenfull.request($('container')[0]);
-            // Does not require jQuery. Can be used like this too:
-            // screenfull.request(document.getElementById('container'));
-
+        var noSleep = new NoSleep();
+        noSleep.enable();
+        $('#request').click(function () {
+          noSleep.enable();
+          alert("No Sleep enabled");
+        });
 
             $('#exit').click(function() {
+              noSleep.disable();
+
                 screenfull.exit();
             });
 
