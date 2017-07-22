@@ -2,13 +2,13 @@ $(document).ready(init)
 var cells
 var socket
 function init(){
-	
+
  socket = io('/mobile')
 
 document.getElementById('request').addEventListener('click', () => {
   if (screenfull.enabled) {
     screenfull.request();
-  } 
+  }
   });
 document.getElementById('exit').addEventListener('click', () => {
   screenfull.exit();
@@ -20,7 +20,7 @@ document.getElementById('exit').addEventListener('click', () => {
     var cell = $('#c'+i)
     cells.push(cell)
   }
-  
+
  /*$('form').submit(function(){
       socket.emit('chat message', $('#m').val());
       $('#m').val('');
@@ -40,12 +40,23 @@ document.getElementById('exit').addEventListener('click', () => {
   })
   socket.on('connect', function() {
     socket.emit('pixel',pixelid)
-	
+
   });
-  /*socket.on('bg', function(color) {
+  socket.on('bg', function(color) {
     // Connected, let's sign-up for to receive messages for this room
-     $('body').css('background', color)
-  });*/
+
+			var black = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
+      var white =  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+			 if(color == "black"){
+         displayBits(black);
+
+       }else if(color=="white"){
+
+				 displayBits(white);
+			 }
+
+
+  });
 
 
   socket.on('pixels',function(code){

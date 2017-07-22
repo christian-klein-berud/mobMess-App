@@ -288,76 +288,72 @@ q.add(msg);
 
 
 function displayMessage(data){
-var mess = 0;
-var counter=0;
-var mob= [];
-var msgIndex =0;
-var letter ;
-  var limit = 35;
-  var space = 1;
-  for (pixelid=limit;pixelid>-1;pixelid--) {
+  var mess = 0;
+  var counter=0;
+  var mob= [];
+  var msgIndex =0;
+  var letter ;
+  var letra;
+    var limit = 35;
+    var space = 1;
+    for (pixelid=limit;pixelid>-1;pixelid--) {
 
-         var room = mobilesock.adapter.rooms[pixelid]
-            if(room){//   ids moviles conectados
-            mob.push(pixelid);
-            //console.log(mob[mob.length-1]);
-           // mob.push(mob[mob.length-1])
-            }
+           var room = mobilesock.adapter.rooms[pixelid]
+              if(room){//   ids moviles conectados
+              mob.push(pixelid);
+              //console.log(mob[mob.length-1]);
+             // mob.push(mob[mob.length-1])
+              }
 
-}
-msgIndex=msgIndex-mob.length;
+  }
+  msgIndex=msgIndex-mob.length;
 
-(function myLoop (i) {
-   setTimeout(function () {
+  (function myLoop (i) {
+     setTimeout(function () {
 
-        letter = data[msgIndex];
+          letter = data[msgIndex];
 
-              if (letter in font){
-              pixels = font[letter];
+                if (letter in font){
+                letra = font[letter];
 
-              }else{
-              pixels = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-                        }
+                }else{
+                letra = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+                          }
 
-       //mobilesock.to(mob[mess]).emit('pixels',font[msg[msgIndex]])
-       // console.log(letter+mob[mess])
-        if(letter === undefined){
-          space = 0
-           }else{
-            space=1
-           }
-       msgIndex++;
-       displayHandler=msgIndex;
-       clog(letter);
-      console.log(letter)
-      displayHandler--;
+         //mobilesock.to(mob[mess]).emit('pixels',font[msg[msgIndex]])
+         // console.log(letter+mob[mess])
 
-      if (msgIndex===data.length){
- panelsock.emit('finnished', true)
-        console.log("DONE")
-        clog("DONE");
-        displayHandler=null;
-      }
-       if(msgIndex<data.length+mob.length*2){
-       //console.log(msgIndex+letter+mob[mess])
+         msgIndex++;
+         displayHandler=msgIndex;
 
-        }else{
-               msgIndex=0-mob.length;
+        displayHandler--;
+
+        if (msgIndex===data.length){
+   panelsock.emit('finnished', true)
+          console.log("DONE")
+          displayHandler=null;
         }
+         if(msgIndex<data.length+mob.length*2){
+         //console.log(msgIndex+letter+mob[mess])
+
+          }else{
+                 msgIndex=0-mob.length;
+          }
 
 
-          //mobilesock.to(mob[mess]).emit('pixels',font[msg[msgIndex]])
-       for(var h = -1; h<3;h++){
-          //console.log(mob[mess]);
-            if(space === 0){
+            //mobilesock.to(mob[mess]).emit('pixels',font[msg[msgIndex]])
+         for(var h = -1; h<3;h++){
+            //console.log(mob[mess]);
+              if(space === 0){
 
-             mobilesock.to(mob[h]).emit('pixels',font[' '])
-
-           }
-
-            mobilesock.to(mob[h]).emit('pixels',font[data[msgIndex-h]])
-          mess++
-        }
+               mobilesock.to(mob[h]).emit('pixels',letra)
+               panelsock.emit('pixels',letra);
+             }else{
+             console.log(letra);
+             panelsock.emit('pixels',letra);
+              mobilesock.to(mob[h]).emit('pixels',letra)}
+            mess++
+          }
 
 
 

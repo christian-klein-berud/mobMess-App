@@ -2,6 +2,7 @@
 $(document).ready(init)
 var socket
 var cells
+  var bits = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
 function init(){
   socket = io('/panel')
   document.getElementById('request').addEventListener('click', () => {
@@ -41,7 +42,10 @@ function init(){
   })
 
 
+
+
   socket.on('pixels',function(code){
+
     displayBits(code)
   })
   socket.on('finnished',function(){
@@ -52,7 +56,7 @@ function init(){
   $('table.table td').click(function(){
     $(this).toggleClass('selected')
     var code = getUpdate()
-    displayBits(code)
+  //  displayBits(code)
     socket.emit('pixels',code)
   })
 
@@ -70,13 +74,15 @@ function init(){
 }
 //display the code of the character display
 function getUpdate(){
-  var bits = []
+
   for(var i=0;i<cells.length;i++){
     var cell = cells[i]
     var bit  = cell.hasClass('selected')
     //http://stackoverflow.com/questions/7820683/convert-boolean-result-into-number-integer#7820695
     bits.push(bit + false)
+
   }
+
   return bits
 }
 
