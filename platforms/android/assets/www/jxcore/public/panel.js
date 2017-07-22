@@ -2,7 +2,7 @@
 $(document).ready(init)
 var socket
 var cells
-  var bits = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
+
 function init(){
   socket = io('/panel')
   document.getElementById('request').addEventListener('click', () => {
@@ -74,7 +74,7 @@ function init(){
 }
 //display the code of the character display
 function getUpdate(){
-
+var bits = [];
   for(var i=0;i<cells.length;i++){
     var cell = cells[i]
     var bit  = cell.hasClass('selected')

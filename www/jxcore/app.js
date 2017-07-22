@@ -330,6 +330,7 @@ function displayMessage(data){
 
         if (msgIndex===data.length){
    panelsock.emit('finnished', true)
+   clog("DONE")
           console.log("DONE")
           displayHandler=null;
         }
@@ -342,20 +343,21 @@ function displayMessage(data){
 
 
             //mobilesock.to(mob[mess]).emit('pixels',font[msg[msgIndex]])
-         for(var h = -1; h<3;h++){
+         for(var h = -1; h<35;h++){
             //console.log(mob[mess]);
               if(space === 0){
 
                mobilesock.to(mob[h]).emit('pixels',letra)
                panelsock.emit('pixels',letra);
              }else{
-             console.log(letra);
+
+
              panelsock.emit('pixels',letra);
               mobilesock.to(mob[h]).emit('pixels',letra)}
             mess++
           }
-
-
+          console.log(letter);
+          clog(letter);
 
        console.log("Counter"+counter)
 counter++
