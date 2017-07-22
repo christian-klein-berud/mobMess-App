@@ -179,7 +179,9 @@ html>body table {height:100%}
     <script src="/socket.io/socket.io.js"></script>
     <script src="/mobile.js"></script>
 	<script src="/screenfull.js"></script>
-  <script src="/NoSleep.js"></script>
+	<script src="/NoSleep.js"></script>
+
+
 	<script>
 		$(function () {
 
@@ -187,16 +189,13 @@ html>body table {height:100%}
 
       var noSleep = new NoSleep();
       noSleep.enable();
-      alert("No Sleep enabled");
 
       $('#request').click(function () {
         noSleep.enable();
-        alert("No Sleep enabled");
       });
-      $('#exit').click(function () {
+   $('#exit').click(function () {
      noSleep.disable();
-     alert("No Sleep Disabled");
-      });
+   });
 
 
 			if (!screenfull.enabled) {
@@ -211,6 +210,7 @@ html>body table {height:100%}
 
 			$('#exit').click(function () {
 				screenfull.exit();
+
 			});
 
 			function fullscreenchange() {
